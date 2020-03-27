@@ -1,0 +1,59 @@
+body {
+	background-color: #1fc8db;
+	background-image: linear-gradient(90deg, #4fc8db, #5cb5e8);
+	font-family: Skia;
+}
+.valm {
+	float: left;
+	margin-top: 125px;
+	margin-right: 25px;
+	margin-left: 50px;
+}
+
+.stilling {
+	text-align: center;
+}
+
+canvas {
+	background: white;
+	margin-left: 70px;
+	margin-top: 50px;
+}
+
+button {
+	border: 1px solid #0f0f0f;
+	text-decoration: none;
+	background-color: #f0f0f0;
+	display: block;
+	padding: 15px 25px;
+	text-align: center;
+	width: 100%;
+}
+
+button:hover {
+	border: 1px solid #1fc8db;
+	background-color: linear-gradient(90deg, #4fc8db, #5cb5e8);
+	color: #1fc8db;
+}
+
+.klukka {
+	position: absolute;
+	color: white;
+	font-size: 35px;
+	margin-top: 50px;
+	margin-left: 40px;
+}
+
+select, input~#breidd {
+	border: 1px solid #0f0f0f;
+	text-decoration: none;
+	background-color: #f0f0f0;
+	display: block;
+	padding: 15px 25px;
+	text-align: center;
+	width: 100%;
+}
+
+option {
+	text-decoration: none;
+}
