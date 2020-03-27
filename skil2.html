@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+<head>
+	<title>Teikniforrit | Bergþór</title>
+	<meta charset="utf-8"/>
+	<link rel="stylesheet" type="text/css" href="mainSkil2.css">
+</head>
+<body onload="startTime()">
+	<div class="klukka" id="txt">
+	</div>
+	<div class="valm">
+		<button id="lina">Lína</button><br>
+		<button id="kassi">Kassi</button><br>
+		<button id="hringur">Hringur</button><br>
+		<button id="hreinsa">Hreinsa</button><br>
+		<div class="stilling">
+			<label>Litur</label><br>
+			<br>
+			<select id="litur">
+				<option value="black">Svartur</option>
+				<option value="yellow">Gulur</option>
+				<option value="red">Rauður</option>
+				<option value="green">Grænn</option>
+				<option value="blue">Blár</option>
+				<option value="purple">Fjólublár</option>
+				<option value="white">Hvítur</option>
+			</select>
+			<br>
+			<br>
+			<label for="fylling">Fylling</label>
+			<br>
+			<br>
+			<select id="fylling">
+				<option value="black">Svartur</option>
+				<option value="yellow">Gulur</option>
+				<option value="red">Rauður</option>
+				<option value="green">Grænn</option>
+				<option value="blue">Blár</option>
+				<option value="purple">Fjólublár</option>
+				<option value="white">Hvítur</option>
+			</select>
+	<!--	<input type="color" id="fylling">
+			<br>
+			<br>
+			<label>Þykkt</label>
+			
+			<select id="breidd">
+				<option value="1">1</option>
+				<option value="3">3</option>
+				<option value="5">5</option>
+				<option value="7">7</option>
+				<option value="9">9</option>
+				<option value="11">11</option>
+			</select>
+	-->
+			<br>
+			<br>
+			<label for="breidd">Þykkt</label><br>
+			<input type="range" id="breidd">
+			<button onclick="sækjaStærð()">Velja stærð</button>
+			<p id="birta"></p>
+	
+		
+		</div>
+		<br>
+		<br>
+	</div>
+	<canvas width="900" height="700" style="border: 1px solid black;" id="myCanvas"></canvas><br>
+	<script type="text/javascript">
+		var c = document.getElementById('myCanvas');
+		var ctx = c.getContext('2d');
+
+		var shape = "kassi"; // Breyta sem segir okkur hverskonar form á að teikna
+		var start_x; // Upphafshnit
+		var start_y; // Upphafshnit
+		var width; // Vídd ferhyrnings
+		var height; // Hæð ferhyrnings
+		var forms = [];
+
+		c.addEventListener('mousedown', start); // forritið hlustar eftir atburðinum mousedown (þ.e.a.s. að músatakka sé haldið niðri) og bregst við honum með svarfallinu start
+		c.addEventListener('mouseup', addShape); // sama og að ofan nema fyrir mouseup sem er þegar músatakka er sleppt og svarfallið er addShape
+		document.getElementById('hreinsa').addEventListener('click', clearArea);
+		document.getElementById('hringur').addEventListener('click', changeShape);
+		document.getElementById('lina').addEventListener('click', changeShape);
+		document.getElementById('kassi').addEventListener('click', changeShape);
+
+
+		function changeShape(event){
+			shape = event.currentTarget.id;
+		}
+
+
+		function start(event) // Fall sem finnur byrjunarhnitið
+		{
+			
+			start_x = event.offsetX;
+			start_y = event.offsetY;
+			
+		}
+
+		function sækjaStærð()
+		{
+			var stærð = document.getElementById("breidd").value;
+			document.getElementById("birta").innerHTML = stærð;
+		}
+
+		function addShape(event) // Fall sem bætir við formum(ferhyrningum)
+		{						
+			switch (shape)
+			{
+				case "kassi":				
+				width = event.offsetX - start_x; // event.offsetX er staðsetning músarbendilsins á x-ás þegar atburðurinn sem kom fallinu af stað varð
+				height = event.offsetY - start_y; // event.offsetY er staðsetning músarbendilsins á y-ás þegar atburðurinn sem kom fallinu af stað varð
+				ctx.beginPath();
+				ctx.rect(start_x, start_y, width, height);
+				ctx.strokeStyle = document.getElementById('litur').value;
+				ctx.fillStyle = document.getElementById('fylling').value;
+				ctx.lineWidth = document.getElementById('breidd').value;
+				ctx.fill();
+				ctx.stroke();
+				ctx.closePath();
+				break;
+				case "hringur":
+				// einhver kóði sem teiknar hring
+				width = event.offsetX - start_x;
+				height = event.offsetY - start_y;
+				var p = (height*height) + (width*width);
+				var radius = Math.sqrt(p);
+				ctx.beginPath();
+				ctx.arc(start_x, start_y, radius, 0, 2*Math.PI);
+				ctx.strokeStyle = document.getElementById('litur').value;
+				ctx.fillStyle = document.getElementById('fylling').value;
+				ctx.lineWidth = document.getElementById('breidd').value;
+				ctx.fill();
+				ctx.stroke();
+				ctx.closePath();
+				break;
+				case "lina":
+				// einhver kóði sem teiknar línu
+				ctx.beginPath();
+				ctx.moveTo(event.offsetX, event.offsetY);
+				ctx.lineTo(start_x, start_y);
+				ctx.strokeStyle = document.getElementById('litur').value;
+				ctx.fillStyle = document.getElementById('fylling').value;
+				ctx.lineWidth = document.getElementById('breidd').value;
+				ctx.fill();
+				ctx.stroke();
+				ctx.closePath();
+				break;
+			}			
+		}
+		// Math.sqrt(a); ef við viljum finna kvaðratrót af a
+		// t.d. gætum við tekið kvaðratrót af summu annars veldis skammhliða
+		// þríhyrnings til að finna langhlið hans
+		function clearArea() {
+			ctx.setTransform(1, 0, 0, 1, 0, 0);
+			ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+		} 
+
+		function startTime() {
+			var today = new Date();
+			var h = today.getHours();
+			var m = today.getMinutes();
+			var s = today.getSeconds();
+			m = checkTime(m);
+			s = checkTime(s);
+			document.getElementById('txt').innerHTML = 
+			h + ":" + m + ":" + s;
+			var t = setTimeout(startTime, 500);
+		}
+		function checkTime(i) {
+			if (i < 10) {i = "0" + i};
+			return i;
+		}
+
+	</script>
+</body>
+</html>
+	
